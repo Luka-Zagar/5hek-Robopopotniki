@@ -9,7 +9,7 @@
 */
 
 void setupUltrasonic();
-void setupUltrasonic();
+float measureDistanceCm();
 
 void driveForward(float distance_cm, int speed_percent);
 void rotate(float angle_deg, int speed_percent);
@@ -155,11 +155,6 @@ void stopMotors() {
   digitalWrite(IN4, LOW);
 }
                                              
-void setupUltrasonic() {
-  pinMode(TRIG_PIN, OUTPUT);
-  pinMode(ECHO_PIN, INPUT);
-}
-
 void setupUltrasonic() {
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
