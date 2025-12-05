@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/luka/Desktop/5hek/5hek-Robopopotniki",
+      "program": "/Users/luka/Desktop/5hek/5hek-Robopopotniki/build/Debug/outDebug"
+    }
+  ]
+}

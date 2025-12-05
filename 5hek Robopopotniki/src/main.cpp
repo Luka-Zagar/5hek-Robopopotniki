@@ -8,10 +8,17 @@
    - Right motor: ENB = 14 (PWM), IN3 = 12, IN4 = 13
 */
 
+void setupUltrasonic();
+float measureDistanceCm();
+
 void driveForward(float distance_cm, int speed_percent);
 void rotate(float angle_deg, int speed_percent);
 void stopMotors();
 int speedPercentToPwm(int speedPercent);
+
+// Ultrasonic sensor pins
+const int TRIG_PIN = 4;
+const int ECHO_PIN = 5;
 
 const int ENA = 25; // left motor PWM
 const int IN1 = 26;
@@ -35,6 +42,8 @@ int speedPercentToPwm(int speedPercent) {
 
 void setup() {
   Serial.begin(115200);
+  setupUltrasonic();
+  
   Serial.println("Drive + Rotate test starting...");
 
   pinMode(IN1, OUTPUT);
@@ -145,3 +154,35 @@ void stopMotors() {
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
 }
+                                             
+void setupUltrasonic() {
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+}
+
+float measureDistanceCm() {
+  // Ensure trigger is low
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+
+  // Send a 10 µs pulse to trigger
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  // Measure duration of echo HIGH pulse (in microseconds)
+  long duration = pulseIn(ECHO_PIN, HIGH, 30000UL); 
+  // 30,000 µs = 30 ms timeout ≈ max reliable distance ~5 meters
+
+  if (duration == 0) {
+    // No echo received (timeout)
+    return -1.0;
+  }
+
+  // Convert time to distance:
+  // Sound speed ≈ 0.0343 cm/µs, but since pulse travels to target and back:
+  // distance = (duration * 0.0343) / 2
+  float distance_cm = (duration * 0.0343f) / 2.0f;
+
+  return distance_cm;
+}                                             
